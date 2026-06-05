@@ -46,4 +46,26 @@ public class NoteService : INoteService
     {
         return await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
     }
+
+    public async Task<NoteDto?> UpdateNote(int id, string title, string content)
+    {
+        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
+        
+        if (note is null)
+            return null;
+
+        note.Title = title;
+
+        note.Content = content;
+        
+        await _appDbContext.SaveChangesAsync();
+
+        return new NoteDto
+        {
+            Id = note.Id,
+            Title = note.Title,
+            Content = note.Content,
+            CreatedAt = note.CreatedAt
+        };
+    }
 }

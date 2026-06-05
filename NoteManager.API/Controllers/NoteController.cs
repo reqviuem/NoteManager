@@ -41,4 +41,12 @@ public class NoteController : ControllerBase
 
         return Ok(note);
     }
+    
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateNote(int id, [FromBody] CreateNoteDto dto)
+    {
+         var updatedNote = await _service.UpdateNote(id, dto.Title,dto.Content);
+
+        return Ok(updatedNote);
+    }
 }

@@ -9,4 +9,6 @@ public interface INoteService
     Task<IEnumerable<Note>> GetNotesAsync();
 
     Task<Note?> GetSpecifiedNote(int id);
+
+    Task<NoteDto?> UpdateNote(int id, string title, string content);
 }
