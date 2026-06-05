@@ -35,17 +35,24 @@ public class NoteController : ControllerBase
     public async Task<IActionResult> GetNote(int id)
     {
         var note = await _service.GetSpecifiedNote(id);
-        
+
         if (note is null)
+        {
             return NotFound();
+        }
 
         return Ok(note);
     }
-    
+
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNote(int id, [FromBody] CreateNoteDto dto)
     {
-         var updatedNote = await _service.UpdateNote(id, dto.Title,dto.Content);
+        var updatedNote = await _service.UpdateNote(id, dto.Title, dto.Content);
+
+        if (updatedNote == null)
+        {
+            return NotFound();
+        }
 
         return Ok(updatedNote);
     }
