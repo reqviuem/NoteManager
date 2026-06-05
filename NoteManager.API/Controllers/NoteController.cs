@@ -6,7 +6,7 @@ using NoteManager.Services;
 namespace NoteManager.Controllers;
 
 [ApiController]
-
+[Route("notes")]
 public class NoteController : ControllerBase
 {
     private readonly INoteService _service;
@@ -15,9 +15,8 @@ public class NoteController : ControllerBase
     {
         _service = service;
     }
-    
+
     [HttpPost]
-    [Route("/notes")]
     public async Task<IActionResult> CreateNote([FromBody] CreateNoteDto dto)
     {
         var createdNote = await _service.CreateNoteAsync(dto);
@@ -26,10 +25,20 @@ public class NoteController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/notes")]
     public async Task<IActionResult> GetAllNotes()
     {
-        var notes = await _service.GetNoteAsync();
+        var notes = await _service.GetNotesAsync();
         return Ok(notes);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetNote(int id)
+    {
+        var note = await _service.GetSpecifiedNote(id);
+        
+        if (note is null)
+            return NotFound();
+
+        return Ok(note);
     }
 }

@@ -35,11 +35,15 @@ public class NoteService : INoteService
             CreatedAt = note.CreatedAt
         };
     }
-    
-    public async Task<IEnumerable<Note>> GetNoteAsync()
+
+    public async Task<IEnumerable<Note>> GetNotesAsync()
     {
         var notes = await _appDbContext.Notes.ToListAsync();
         return notes;
     }
-    
+
+    public async Task<Note?> GetSpecifiedNote(int id)
+    {
+        return await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
+    }
 }
