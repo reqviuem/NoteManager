@@ -16,6 +16,12 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+
 app.MapControllers();
 
 app.Run();

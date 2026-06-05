@@ -28,7 +28,7 @@ public class NoteController : ControllerBase
     public async Task<IActionResult> GetAllNotes()
     {
         var notes = await _service.GetNotesAsync();
-        
+
         return Ok(notes);
     }
 
@@ -60,7 +60,6 @@ public class NoteController : ControllerBase
 
 
     [HttpDelete("{id}")]
-
     public async Task<IActionResult> DeleteNote(int id)
     {
         var noteToDelete = await _service.DeleteNoteAsync(id);
