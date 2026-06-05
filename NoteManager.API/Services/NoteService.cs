@@ -1,4 +1,5 @@
-﻿using NoteManager.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using NoteManager.Data;
 using NoteManager.Dtos;
 using NoteManager.Models;
 
@@ -34,4 +35,11 @@ public class NoteService : INoteService
             CreatedAt = note.CreatedAt
         };
     }
+    
+    public async Task<IEnumerable<Note>> GetNoteAsync()
+    {
+        var notes = await _appDbContext.Notes.ToListAsync();
+        return notes;
+    }
+    
 }

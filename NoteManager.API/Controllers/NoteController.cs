@@ -24,4 +24,12 @@ public class NoteController : ControllerBase
 
         return Ok(createdNote);
     }
+
+    [HttpGet]
+    [Route("/notes")]
+    public async Task<IActionResult> GetAllNotes()
+    {
+        var notes = await _service.GetNoteAsync();
+        return Ok(notes);
+    }
 }
