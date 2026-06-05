@@ -1,0 +1,15 @@
+﻿{
+  "APP_TITLE": "Note Manager",
+  "NOTES": "Notes",
+  "NEW_NOTE": "New Note",
+  "EDIT_NOTE": "Edit Note",
+  "TITLE": "Title",
+  "CONTENT": "Content",
+  "SAVE": "Save",
+  "CANCEL": "Cancel",
+  "DELETE": "Delete",
+  "EDIT": "Edit",
+  "NO_NOTES": "No notes yet. Create one!",
+  "LOADING": "Loading...",
+  "LANGUAGE": "Language"
+}

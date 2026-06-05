@@ -1,0 +1,15 @@
+﻿{
+  "APP_TITLE": "Gestor de Notas",
+  "NOTES": "Notas",
+  "NEW_NOTE": "Nueva Nota",
+  "EDIT_NOTE": "Editar Nota",
+  "TITLE": "Título",
+  "CONTENT": "Contenido",
+  "SAVE": "Guardar",
+  "CANCEL": "Cancelar",
+  "DELETE": "Eliminar",
+  "EDIT": "Editar",
+  "NO_NOTES": "Sin notas. ¡Crea una!",
+  "LOADING": "Cargando...",
+  "LANGUAGE": "Idioma"
+}
