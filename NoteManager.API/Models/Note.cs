@@ -1,4 +1,6 @@
-﻿namespace NoteManager.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NoteManager.Models;
 
 public class Note
 {
