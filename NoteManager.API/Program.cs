@@ -4,6 +4,12 @@ using NoteManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -14,13 +20,7 @@ builder.Services.AddScoped<INoteService, NoteService>();
 var app = builder.Build();
 
 
-app.UseHttpsRedirection();
-
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-});
+app.UseCors();
 
 app.MapControllers();
 
