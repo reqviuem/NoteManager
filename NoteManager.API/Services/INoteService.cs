@@ -6,9 +6,11 @@ namespace NoteManager.Services;
 public interface INoteService
 {
     Task<NoteDto> CreateNoteAsync(CreateNoteDto dto);
-    Task<IEnumerable<Note>> GetNotesAsync();
+    Task<IEnumerable<NoteDto>> GetNotesAsync();
 
-    Task<Note?> GetSpecifiedNote(int id);
+    Task<NoteDto?> GetSpecifiedNoteAsync(int id);
 
-    Task<NoteDto?> UpdateNote(int id, string title, string content);
+    Task<NoteDto?> UpdateNoteAsync(int id, string title, string content);
+
+    Task<bool> DeleteNoteAsync(int id);
 }

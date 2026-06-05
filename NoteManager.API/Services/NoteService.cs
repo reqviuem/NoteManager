@@ -36,18 +36,35 @@ public class NoteService : INoteService
         };
     }
 
-    public async Task<IEnumerable<Note>> GetNotesAsync()
+    public async Task<IEnumerable<NoteDto>> GetNotesAsync()
     {
-        var notes = await _appDbContext.Notes.ToListAsync();
+        var notes = await _appDbContext.Notes
+            .Select(note => new NoteDto
+            {
+                Id = note.Id,
+                Title = note.Title,
+                Content = note.Content,
+                CreatedAt = note.CreatedAt
+            })
+            .ToListAsync();
+
         return notes;
     }
 
-    public async Task<Note?> GetSpecifiedNote(int id)
+    public async Task<NoteDto?> GetSpecifiedNoteAsync(int id)
     {
-        return await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
+        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
+
+        return new NoteDto()
+        {
+            Id = note.Id,
+            Title = note.Title,
+            Content = note.Content,
+            CreatedAt = note.CreatedAt
+        };
     }
 
-    public async Task<NoteDto?> UpdateNote(int id, string title, string content)
+    public async Task<NoteDto?> UpdateNoteAsync(int id, string title, string content)
     {
         var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
         
@@ -67,5 +84,20 @@ public class NoteService : INoteService
             Content = note.Content,
             CreatedAt = note.CreatedAt
         };
+    }
+    
+    public async Task<bool> DeleteNoteAsync(int id)
+    {
+        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
+
+        if (note == null)
+        {
+            return false;
+        }
+        
+        _appDbContext.Notes.Remove(note);
+        await _appDbContext.SaveChangesAsync();
+
+        return true;
     }
 }

@@ -21,20 +21,21 @@ public class NoteController : ControllerBase
     {
         var createdNote = await _service.CreateNoteAsync(dto);
 
-        return Ok(createdNote);
+        return CreatedAtAction(nameof(GetNote), new { id = createdNote.Id }, createdNote);
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllNotes()
     {
         var notes = await _service.GetNotesAsync();
+        
         return Ok(notes);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetNote(int id)
     {
-        var note = await _service.GetSpecifiedNote(id);
+        var note = await _service.GetSpecifiedNoteAsync(id);
 
         if (note is null)
         {
@@ -47,7 +48,7 @@ public class NoteController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNote(int id, [FromBody] CreateNoteDto dto)
     {
-        var updatedNote = await _service.UpdateNote(id, dto.Title, dto.Content);
+        var updatedNote = await _service.UpdateNoteAsync(id, dto.Title, dto.Content);
 
         if (updatedNote == null)
         {
@@ -55,5 +56,20 @@ public class NoteController : ControllerBase
         }
 
         return Ok(updatedNote);
+    }
+
+
+    [HttpDelete("{id}")]
+
+    public async Task<IActionResult> DeleteNote(int id)
+    {
+        var noteToDelete = await _service.DeleteNoteAsync(id);
+
+        if (noteToDelete)
+        {
+            return Ok($"Note with id: {id} deleted");
+        }
+
+        return NotFound("Note not found!");
     }
 }
