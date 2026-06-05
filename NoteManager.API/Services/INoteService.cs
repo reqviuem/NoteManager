@@ -10,7 +10,7 @@ public interface INoteService
 
     Task<NoteDto?> GetSpecifiedNoteAsync(int id);
 
-    Task<NoteDto?> UpdateNoteAsync(int id, string title, string content);
+    Task<NoteDto?> UpdateNoteAsync(int id, CreateNoteDto dto);
 
     Task<bool> DeleteNoteAsync(int id);
 }

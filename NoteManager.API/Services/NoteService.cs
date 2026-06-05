@@ -54,7 +54,10 @@ public class NoteService : INoteService
     public async Task<NoteDto?> GetSpecifiedNoteAsync(int id)
     {
         var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
-
+        
+        if (note is null)
+            return null;
+        
         return new NoteDto()
         {
             Id = note.Id,
@@ -64,16 +67,16 @@ public class NoteService : INoteService
         };
     }
 
-    public async Task<NoteDto?> UpdateNoteAsync(int id, string title, string content)
+    public async Task<NoteDto?> UpdateNoteAsync(int id, CreateNoteDto dto)
     {
         var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
         
         if (note is null)
             return null;
 
-        note.Title = title;
+        note.Title = dto.Title;
 
-        note.Content = content;
+        note.Content = dto.Content;
         
         await _appDbContext.SaveChangesAsync();
 

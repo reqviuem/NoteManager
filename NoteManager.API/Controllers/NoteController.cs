@@ -48,7 +48,7 @@ public class NoteController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNote(int id, [FromBody] CreateNoteDto dto)
     {
-        var updatedNote = await _service.UpdateNoteAsync(id, dto.Title, dto.Content);
+        var updatedNote = await _service.UpdateNoteAsync(id, dto);
 
         if (updatedNote == null)
         {
