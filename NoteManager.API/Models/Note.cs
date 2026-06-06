@@ -6,9 +6,11 @@ public class Note
 {
     public Guid Id { get; set; }
 
-    [Required] public required string Title { get; set; }
+    [Required] 
+    public required string Title { get; set; }
 
-    [Required] public required string Content { get; set; }
+    [Required] 
+    public required string Content { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
