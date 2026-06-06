@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NoteManager.Data;
-using NoteManager.Dtos;
+using NoteManager.Dtos.CreateNoteRequestDto;
+using NoteManager.Dtos.NoteResponseDto;
 using NoteManager.Models;
 
 namespace NoteManager.Services;
@@ -14,13 +15,18 @@ public class NoteService : INoteService
         _appDbContext = appDbContext;
     }
 
-    public async Task<NoteDto> CreateNoteAsync(CreateNoteDto dto)
+    public async Task<NoteDto?> CreateNoteAsync(CreateNoteDto dto)
     {
+
+        if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
+        {
+            return null;
+        }
+        
         var note = new Note()
         {
             Title = dto.Title,
-            Content = dto.Content,
-            CreatedAt = DateTime.UtcNow
+            Content = dto.Content
         };
 
         _appDbContext.Notes.Add(note);
@@ -29,10 +35,9 @@ public class NoteService : INoteService
 
         return new NoteDto()
         {
-            Id = note.Id,
+            Guid = note.Guid,
             Title = note.Title,
-            Content = note.Content,
-            CreatedAt = note.CreatedAt
+            Content = note.Content
         };
     }
 
@@ -41,35 +46,33 @@ public class NoteService : INoteService
         var notes = await _appDbContext.Notes
             .Select(note => new NoteDto
             {
-                Id = note.Id,
+                Guid = note.Guid,
                 Title = note.Title,
-                Content = note.Content,
-                CreatedAt = note.CreatedAt
+                Content = note.Content
             })
             .ToListAsync();
 
         return notes;
     }
 
-    public async Task<NoteDto?> GetSpecifiedNoteAsync(int id)
+    public async Task<NoteDto?> GetSpecifiedNoteAsync(Guid id)
     {
-        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
+        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Guid == id);
         
         if (note is null)
             return null;
         
         return new NoteDto()
         {
-            Id = note.Id,
+            Guid = note.Guid,
             Title = note.Title,
-            Content = note.Content,
-            CreatedAt = note.CreatedAt
+            Content = note.Content
         };
     }
 
-    public async Task<NoteDto?> UpdateNoteAsync(int id, CreateNoteDto dto)
+    public async Task<NoteDto?> UpdateNoteAsync(Guid id, CreateNoteDto dto)
     {
-        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
+        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Guid == id);
         
         if (note is null)
             return null;
@@ -82,16 +85,15 @@ public class NoteService : INoteService
 
         return new NoteDto
         {
-            Id = note.Id,
+            Guid = note.Guid,
             Title = note.Title,
-            Content = note.Content,
-            CreatedAt = note.CreatedAt
+            Content = note.Content
         };
     }
     
-    public async Task<bool> DeleteNoteAsync(int id)
+    public async Task<bool> DeleteNoteAsync(Guid id)
     {
-        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Id == id);
+        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Guid == id);
 
         if (note == null)
         {

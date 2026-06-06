@@ -1,16 +1,17 @@
-﻿using NoteManager.Dtos;
-using NoteManager.Models;
+﻿using NoteManager.Dtos.CreateNoteRequestDto;
+using NoteManager.Dtos.NoteResponseDto;
+
 
 namespace NoteManager.Services;
 
 public interface INoteService
 {
-    Task<NoteDto> CreateNoteAsync(CreateNoteDto dto);
+    Task<NoteDto?> CreateNoteAsync(CreateNoteDto dto);
     Task<IEnumerable<NoteDto>> GetNotesAsync();
 
-    Task<NoteDto?> GetSpecifiedNoteAsync(int id);
+    Task<NoteDto?> GetSpecifiedNoteAsync(Guid id);
 
-    Task<NoteDto?> UpdateNoteAsync(int id, CreateNoteDto dto);
+    Task<NoteDto?> UpdateNoteAsync(Guid id, CreateNoteDto dto);
 
-    Task<bool> DeleteNoteAsync(int id);
+    Task<bool> DeleteNoteAsync(Guid id);
 }

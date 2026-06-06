@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NoteManager.Dtos;
+namespace NoteManager.Dtos.CreateNoteRequestDto;
 
 public class CreateNoteDto
 {
     [Required]
     [MinLength(1)]
-    public string Title { get; set; } = "";
+    public required string Title { get; set; }
     
     [Required]
     [MinLength(1)]
-    public string Content { get; set; } = "";
+    public required string Content { get; set; }
 }

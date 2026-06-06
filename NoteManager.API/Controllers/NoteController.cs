@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using NoteManager.Dtos;
+using NoteManager.Dtos.CreateNoteRequestDto;
 using NoteManager.Services;
 
 namespace NoteManager.Controllers;
@@ -21,7 +21,12 @@ public class NoteController : ControllerBase
     {
         var createdNote = await _service.CreateNoteAsync(dto);
 
-        return CreatedAtAction(nameof(GetNote), new { id = createdNote.Id }, createdNote);
+        if (createdNote == null)
+        {
+            return BadRequest();
+        }
+
+        return CreatedAtAction(nameof(GetNote), new { id = createdNote.Guid }, createdNote);
     }
 
     [HttpGet]
@@ -33,7 +38,7 @@ public class NoteController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetNote(int id)
+    public async Task<IActionResult> GetNote(Guid id)
     {
         var note = await _service.GetSpecifiedNoteAsync(id);
 
@@ -46,13 +51,18 @@ public class NoteController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateNote(int id, [FromBody] CreateNoteDto dto)
+    public async Task<IActionResult> UpdateNote(Guid id, [FromBody] CreateNoteDto dto)
     {
         var updatedNote = await _service.UpdateNoteAsync(id, dto);
-
+        
         if (updatedNote == null)
         {
             return NotFound();
+        }
+
+        if (string.IsNullOrWhiteSpace(updatedNote.Title) || string.IsNullOrWhiteSpace(updatedNote.Content))
+        {
+            return BadRequest();
         }
 
         return Ok(updatedNote);
@@ -60,7 +70,7 @@ public class NoteController : ControllerBase
 
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteNote(int id)
+    public async Task<IActionResult> DeleteNote(Guid id)
     {
         var noteToDelete = await _service.DeleteNoteAsync(id);
 
