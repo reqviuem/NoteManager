@@ -4,7 +4,7 @@ namespace NoteManager.Models;
 
 public class Note
 {
-    public Guid Guid { get; set; } = new Guid();
+    public Guid Guid { get; set; }
     [Required]
     public required string Title { get; set; }
     [Required]
