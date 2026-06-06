@@ -1,0 +1,43 @@
+<div class="container">
+  <header>
+    <h1>{{ 'APP_TITLE' | translate }}</h1>
+    <div class="header-actions">
+      <div class="lang-switcher">
+        <button
+          *ngFor="let lang of languages"
+          [class.active]="translateService.currentLang() === lang.code"
+          (click)="switchLanguage(lang.code)">
+          {{ lang.label }}
+        </button>
+      </div>
+      <a routerLink="/notes/new" class="btn-primary">
+        {{ 'NEW_NOTE' | translate }}
+      </a>
+    </div>
+  </header>
+
+  <div *ngIf="loading$ | async" class="loading">
+    {{ 'LOADING' | translate }}
+  </div>
+
+  <div *ngIf="!(loading$ | async)">
+    <div *ngIf="(notes$ | async)?.length === 0" class="empty">
+      {{ 'NO_NOTES' | translate }}
+    </div>
+
+    <div class="notes-grid">
+      <div class="note-card" *ngFor="let note of notes$ | async">
+        <h3>{{ note.title }}</h3>
+        <p>{{ note.content }}</p>
+        <div class="note-actions">
+          <a [routerLink]="['/notes', note.id, 'edit']" class="btn-edit">
+            {{ 'EDIT' | translate }}
+          </a>
+          <button (click)="onDelete(note.id)" class="btn-delete">
+            {{ 'DELETE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

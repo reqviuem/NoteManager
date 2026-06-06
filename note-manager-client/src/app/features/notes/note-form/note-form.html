@@ -1,0 +1,24 @@
+<div class="container">
+  <h2>{{ (isEditMode ? 'EDIT_NOTE' : 'NEW_NOTE') | translate }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="field">
+      <label>{{ 'TITLE' | translate }}</label>
+      <input formControlName="title" type="text" />
+    </div>
+
+    <div class="field">
+      <label>{{ 'CONTENT' | translate }}</label>
+      <textarea formControlName="content" rows="6"></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="button" (click)="onCancel()" class="btn-cancel">
+        {{ 'CANCEL' | translate }}
+      </button>
+      <button type="submit" [disabled]="form.invalid" class="btn-save">
+        {{ 'SAVE' | translate }}
+      </button>
+    </div>
+  </form>
+</div>
