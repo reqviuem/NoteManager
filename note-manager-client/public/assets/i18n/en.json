@@ -11,5 +11,6 @@
   "EDIT": "Edit",
   "NO_NOTES": "No notes yet. Create one!",
   "LOADING": "Loading...",
-  "LANGUAGE": "Language"
+  "LANGUAGE": "Language",
+  "API_ERROR": "Title and content cannot be empty or contain only spaces"
 }

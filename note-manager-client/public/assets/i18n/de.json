@@ -1,0 +1,16 @@
+﻿{
+  "APP_TITLE": "Notizmanager",
+  "NOTES": "Notizen",
+  "NEW_NOTE": "Neue Notiz",
+  "EDIT_NOTE": "Notiz bearbeiten",
+  "TITLE": "Titel",
+  "CONTENT": "Inhalt",
+  "SAVE": "Speichern",
+  "CANCEL": "Abbrechen",
+  "DELETE": "Löschen",
+  "EDIT": "Bearbeiten",
+  "NO_NOTES": "Keine Notizen vorhanden. Erstellen Sie eine!",
+  "LOADING": "Laden...",
+  "LANGUAGE": "Sprache",
+  "API_ERROR": "Titel und Inhalt dürfen nicht leer sein oder nur Leerzeichen enthalten"
+}

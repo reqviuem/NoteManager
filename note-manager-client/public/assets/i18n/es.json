@@ -11,5 +11,6 @@
   "EDIT": "Editar",
   "NO_NOTES": "Sin notas. ¡Crea una!",
   "LOADING": "Cargando...",
-  "LANGUAGE": "Idioma"
+  "LANGUAGE": "Idioma",
+  "API_ERROR": "El título y el contenido no pueden estar vacíos ni contener solo espacios"
 }
