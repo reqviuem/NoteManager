@@ -66,9 +66,9 @@ public class NoteController : ControllerBase
 
         if (noteToDelete)
         {
-            return Ok($"Note with id: {id} deleted");
+            return Ok(id);
         }
 
-        return NotFound("Note not found!");
+        return NotFound();
     }
 }
