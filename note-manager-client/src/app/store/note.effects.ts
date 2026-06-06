@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { NoteService } from '../core/services/note.service';
 import * as NoteActions from './note.actions';
@@ -6,7 +6,8 @@ import { catchError, map, mergeMap, of } from 'rxjs';
 
 @Injectable()
 export class NoteEffects {
-  constructor(private actions$: Actions, private noteService: NoteService) {}
+  private actions$ = inject(Actions);
+  private noteService = inject(NoteService);
 
   loadNotes$ = createEffect(() =>
     this.actions$.pipe(
