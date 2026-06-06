@@ -15,14 +15,14 @@ public class NoteService : INoteService
         _appDbContext = appDbContext;
     }
 
-    public async Task<NoteRsponseDto?> CreateNoteAsync(CreateNoteRequestDto requestDto, CancellationToken cancellationToken)
+    public async Task<NoteRsponseDto?> CreateNoteAsync(CreateNoteRequestDto requestDto,
+        CancellationToken cancellationToken)
     {
-
         if (string.IsNullOrWhiteSpace(requestDto.Title) || string.IsNullOrWhiteSpace(requestDto.Content))
         {
             return null;
         }
-        
+
         var note = new Note()
         {
             Title = requestDto.Title,
@@ -60,10 +60,10 @@ public class NoteService : INoteService
     public async Task<NoteRsponseDto?> GetSpecifiedNoteAsync(Guid id, CancellationToken cancellationToken)
     {
         var note = await _appDbContext.Notes.FindAsync([id], cancellationToken);
-        
+
         if (note is null)
             return null;
-        
+
         return new NoteRsponseDto()
         {
             Id = note.Id,
@@ -73,17 +73,18 @@ public class NoteService : INoteService
         };
     }
 
-    public async Task<NoteRsponseDto?> UpdateNoteAsync(Guid id, CreateNoteRequestDto requestDto, CancellationToken cancellationToken)
+    public async Task<NoteRsponseDto?> UpdateNoteAsync(Guid id, CreateNoteRequestDto requestDto,
+        CancellationToken cancellationToken)
     {
         var note = await _appDbContext.Notes.FindAsync([id], cancellationToken);
-        
+
         if (note is null)
             return null;
 
         note.Title = requestDto.Title;
 
         note.Content = requestDto.Content;
-        
+
         await _appDbContext.SaveChangesAsync(cancellationToken);
 
         return new NoteRsponseDto
@@ -94,7 +95,7 @@ public class NoteService : INoteService
             CreatedAt = note.CreatedAt
         };
     }
-    
+
     public async Task<bool> DeleteNoteAsync(Guid id, CancellationToken cancellationToken)
     {
         var note = await _appDbContext.Notes.FindAsync([id], cancellationToken);
@@ -103,7 +104,7 @@ public class NoteService : INoteService
         {
             return false;
         }
-        
+
         _appDbContext.Notes.Remove(note);
         await _appDbContext.SaveChangesAsync(cancellationToken);
 

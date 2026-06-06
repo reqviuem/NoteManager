@@ -16,7 +16,8 @@ public class NoteController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNote([FromBody] CreateNoteRequestDto requestDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateNote([FromBody] CreateNoteRequestDto requestDto,
+        CancellationToken cancellationToken)
     {
         var createdNote = await _service.CreateNoteAsync(requestDto, cancellationToken);
 
@@ -50,15 +51,16 @@ public class NoteController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateNote(Guid id, [FromBody] CreateNoteRequestDto requestDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateNote(Guid id, [FromBody] CreateNoteRequestDto requestDto,
+        CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(requestDto.Title) || string.IsNullOrWhiteSpace(requestDto.Content))
         {
             return BadRequest();
         }
-        
+
         var updatedNote = await _service.UpdateNoteAsync(id, requestDto, cancellationToken);
-        
+
         if (updatedNote == null)
         {
             return NotFound();
@@ -69,7 +71,7 @@ public class NoteController : ControllerBase
 
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteNote(Guid id,CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteNote(Guid id, CancellationToken cancellationToken)
     {
         var noteToDelete = await _service.DeleteNoteAsync(id, cancellationToken);
 
