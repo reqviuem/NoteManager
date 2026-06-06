@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NoteManager.Dtos.CreateNoteRequestDto;
+using NoteManager.Dtos.Requests;
 using NoteManager.Services;
 
 namespace NoteManager.Controllers;
@@ -16,9 +16,9 @@ public class NoteController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNote([FromBody] CreateNoteDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateNote([FromBody] CreateNoteRequestDto requestDto, CancellationToken cancellationToken)
     {
-        var createdNote = await _service.CreateNoteAsync(dto, cancellationToken);
+        var createdNote = await _service.CreateNoteAsync(requestDto, cancellationToken);
 
         if (createdNote == null)
         {
@@ -50,14 +50,14 @@ public class NoteController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateNote(Guid id, [FromBody] CreateNoteDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateNote(Guid id, [FromBody] CreateNoteRequestDto requestDto, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
+        if (string.IsNullOrWhiteSpace(requestDto.Title) || string.IsNullOrWhiteSpace(requestDto.Content))
         {
             return BadRequest();
         }
         
-        var updatedNote = await _service.UpdateNoteAsync(id, dto, cancellationToken);
+        var updatedNote = await _service.UpdateNoteAsync(id, requestDto, cancellationToken);
         
         if (updatedNote == null)
         {

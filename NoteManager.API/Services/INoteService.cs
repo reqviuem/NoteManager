@@ -1,17 +1,18 @@
-﻿using NoteManager.Dtos.CreateNoteRequestDto;
-using NoteManager.Dtos.NoteResponseDto;
+﻿
+using NoteManager.Dtos.Requests;
+using NoteManager.Dtos.Responses;
 
 
 namespace NoteManager.Services;
 
 public interface INoteService
 {
-    Task<NoteDto?> CreateNoteAsync(CreateNoteDto dto,CancellationToken cancellationToken);
-    Task<IEnumerable<NoteDto>> GetNotesAsync(CancellationToken cancellationToken);
+    Task<NoteRsponseDto?> CreateNoteAsync(CreateNoteRequestDto requestDto,CancellationToken cancellationToken);
+    Task<IEnumerable<NoteRsponseDto>> GetNotesAsync(CancellationToken cancellationToken);
 
-    Task<NoteDto?> GetSpecifiedNoteAsync(Guid id,CancellationToken cancellationToken);
+    Task<NoteRsponseDto?> GetSpecifiedNoteAsync(Guid id,CancellationToken cancellationToken);
 
-    Task<NoteDto?> UpdateNoteAsync(Guid id, CreateNoteDto dto,CancellationToken cancellationToken);
+    Task<NoteRsponseDto?> UpdateNoteAsync(Guid id, CreateNoteRequestDto requestDto,CancellationToken cancellationToken);
 
     Task<bool> DeleteNoteAsync(Guid id,CancellationToken cancellationToken);
 }

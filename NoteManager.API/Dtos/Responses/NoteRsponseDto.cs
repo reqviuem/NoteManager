@@ -1,6 +1,6 @@
-﻿namespace NoteManager.Dtos.NoteResponseDto;
+﻿namespace NoteManager.Dtos.Responses;
 
-public class NoteDto
+public class NoteRsponseDto
 {
     public Guid Id { get; set; }
     public required string  Title { get; set; }

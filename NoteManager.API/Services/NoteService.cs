@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NoteManager.Data;
-using NoteManager.Dtos.CreateNoteRequestDto;
-using NoteManager.Dtos.NoteResponseDto;
+using NoteManager.Dtos.Requests;
+using NoteManager.Dtos.Responses;
 using NoteManager.Models;
 
 namespace NoteManager.Services;
@@ -15,25 +15,25 @@ public class NoteService : INoteService
         _appDbContext = appDbContext;
     }
 
-    public async Task<NoteDto?> CreateNoteAsync(CreateNoteDto dto, CancellationToken cancellationToken)
+    public async Task<NoteRsponseDto?> CreateNoteAsync(CreateNoteRequestDto requestDto, CancellationToken cancellationToken)
     {
 
-        if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
+        if (string.IsNullOrWhiteSpace(requestDto.Title) || string.IsNullOrWhiteSpace(requestDto.Content))
         {
             return null;
         }
         
         var note = new Note()
         {
-            Title = dto.Title,
-            Content = dto.Content
+            Title = requestDto.Title,
+            Content = requestDto.Content
         };
 
         _appDbContext.Notes.Add(note);
 
         await _appDbContext.SaveChangesAsync(cancellationToken);
 
-        return new NoteDto()
+        return new NoteRsponseDto()
         {
             Id = note.Id,
             Title = note.Title,
@@ -42,10 +42,10 @@ public class NoteService : INoteService
         };
     }
 
-    public async Task<IEnumerable<NoteDto>> GetNotesAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<NoteRsponseDto>> GetNotesAsync(CancellationToken cancellationToken)
     {
         var notes = await _appDbContext.Notes
-            .Select(note => new NoteDto
+            .Select(note => new NoteRsponseDto
             {
                 Id = note.Id,
                 Title = note.Title,
@@ -57,14 +57,14 @@ public class NoteService : INoteService
         return notes;
     }
 
-    public async Task<NoteDto?> GetSpecifiedNoteAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<NoteRsponseDto?> GetSpecifiedNoteAsync(Guid id, CancellationToken cancellationToken)
     {
         var note = await _appDbContext.Notes.FindAsync([id], cancellationToken);
         
         if (note is null)
             return null;
         
-        return new NoteDto()
+        return new NoteRsponseDto()
         {
             Id = note.Id,
             Title = note.Title,
@@ -73,20 +73,20 @@ public class NoteService : INoteService
         };
     }
 
-    public async Task<NoteDto?> UpdateNoteAsync(Guid id, CreateNoteDto dto, CancellationToken cancellationToken)
+    public async Task<NoteRsponseDto?> UpdateNoteAsync(Guid id, CreateNoteRequestDto requestDto, CancellationToken cancellationToken)
     {
         var note = await _appDbContext.Notes.FindAsync([id], cancellationToken);
         
         if (note is null)
             return null;
 
-        note.Title = dto.Title;
+        note.Title = requestDto.Title;
 
-        note.Content = dto.Content;
+        note.Content = requestDto.Content;
         
         await _appDbContext.SaveChangesAsync(cancellationToken);
 
-        return new NoteDto
+        return new NoteRsponseDto
         {
             Id = note.Id,
             Title = note.Title,

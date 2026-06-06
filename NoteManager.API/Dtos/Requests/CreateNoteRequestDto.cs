@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NoteManager.Dtos.CreateNoteRequestDto;
+namespace NoteManager.Dtos.Requests;
 
-public class CreateNoteDto
+public class CreateNoteRequestDto
 {
     [Required]
     [MinLength(1)]
