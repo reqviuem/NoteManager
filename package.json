@@ -2,9 +2,7 @@
   "dependencies": {
     "@ngrx/effects": "^21.1.0",
     "@ngrx/entity": "^21.1.0",
-    "@ngrx/store": "^21.1.0",
-    "@ngx-translate/core": "^17.0.0",
-    "@ngx-translate/http-loader": "^17.0.0"
+    "@ngrx/store": "^21.1.0"
   },
   "devDependencies": {
     "cypress": "^15.16.0"
