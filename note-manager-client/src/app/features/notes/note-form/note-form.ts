@@ -47,7 +47,6 @@ export class NoteFormComponent implements OnInit {
       });
     }
 
-    // navigate away only on success
     this.actions$.pipe(
       ofType(createNoteSuccess, updateNoteSuccess),
       take(1)
