@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NoteManager.Dtos.CreateNoteRequestDto;
 using NoteManager.Services;
 
@@ -17,30 +16,30 @@ public class NoteController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNote([FromBody] CreateNoteDto dto)
+    public async Task<IActionResult> CreateNote([FromBody] CreateNoteDto dto, CancellationToken cancellationToken)
     {
-        var createdNote = await _service.CreateNoteAsync(dto);
+        var createdNote = await _service.CreateNoteAsync(dto, cancellationToken);
 
         if (createdNote == null)
         {
             return BadRequest();
         }
 
-        return CreatedAtAction(nameof(GetNote), new { id = createdNote.Guid }, createdNote);
+        return CreatedAtAction(nameof(GetNote), new { id = createdNote.Id }, createdNote);
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllNotes()
+    public async Task<IActionResult> GetAllNotes(CancellationToken cancellationToken)
     {
-        var notes = await _service.GetNotesAsync();
+        var notes = await _service.GetNotesAsync(cancellationToken);
 
         return Ok(notes);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetNote(Guid id)
+    public async Task<IActionResult> GetNote(Guid id, CancellationToken cancellationToken)
     {
-        var note = await _service.GetSpecifiedNoteAsync(id);
+        var note = await _service.GetSpecifiedNoteAsync(id, cancellationToken);
 
         if (note is null)
         {
@@ -51,18 +50,18 @@ public class NoteController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateNote(Guid id, [FromBody] CreateNoteDto dto)
+    public async Task<IActionResult> UpdateNote(Guid id, [FromBody] CreateNoteDto dto, CancellationToken cancellationToken)
     {
-        var updatedNote = await _service.UpdateNoteAsync(id, dto);
+        if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
+        {
+            return BadRequest();
+        }
+        
+        var updatedNote = await _service.UpdateNoteAsync(id, dto, cancellationToken);
         
         if (updatedNote == null)
         {
             return NotFound();
-        }
-
-        if (string.IsNullOrWhiteSpace(updatedNote.Title) || string.IsNullOrWhiteSpace(updatedNote.Content))
-        {
-            return BadRequest();
         }
 
         return Ok(updatedNote);
@@ -70,9 +69,9 @@ public class NoteController : ControllerBase
 
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteNote(Guid id)
+    public async Task<IActionResult> DeleteNote(Guid id,CancellationToken cancellationToken)
     {
-        var noteToDelete = await _service.DeleteNoteAsync(id);
+        var noteToDelete = await _service.DeleteNoteAsync(id, cancellationToken);
 
         if (noteToDelete)
         {

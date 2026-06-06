@@ -4,11 +4,11 @@ namespace NoteManager.Models;
 
 public class Note
 {
-    public Guid Guid { get; set; }
+    public Guid Id { get; set; }
     [Required]
     public required string Title { get; set; }
     [Required]
     public required string Content { get; set; }
     
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

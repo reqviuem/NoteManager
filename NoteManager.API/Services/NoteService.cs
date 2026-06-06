@@ -15,7 +15,7 @@ public class NoteService : INoteService
         _appDbContext = appDbContext;
     }
 
-    public async Task<NoteDto?> CreateNoteAsync(CreateNoteDto dto)
+    public async Task<NoteDto?> CreateNoteAsync(CreateNoteDto dto, CancellationToken cancellationToken)
     {
 
         if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
@@ -31,48 +31,51 @@ public class NoteService : INoteService
 
         _appDbContext.Notes.Add(note);
 
-        await _appDbContext.SaveChangesAsync();
+        await _appDbContext.SaveChangesAsync(cancellationToken);
 
         return new NoteDto()
         {
-            Guid = note.Guid,
+            Id = note.Id,
             Title = note.Title,
-            Content = note.Content
+            Content = note.Content,
+            CreatedAt = note.CreatedAt
         };
     }
 
-    public async Task<IEnumerable<NoteDto>> GetNotesAsync()
+    public async Task<IEnumerable<NoteDto>> GetNotesAsync(CancellationToken cancellationToken)
     {
         var notes = await _appDbContext.Notes
             .Select(note => new NoteDto
             {
-                Guid = note.Guid,
+                Id = note.Id,
                 Title = note.Title,
-                Content = note.Content
+                Content = note.Content,
+                CreatedAt = note.CreatedAt
             })
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return notes;
     }
 
-    public async Task<NoteDto?> GetSpecifiedNoteAsync(Guid id)
+    public async Task<NoteDto?> GetSpecifiedNoteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Guid == id);
+        var note = await _appDbContext.Notes.FindAsync([id], cancellationToken);
         
         if (note is null)
             return null;
         
         return new NoteDto()
         {
-            Guid = note.Guid,
+            Id = note.Id,
             Title = note.Title,
-            Content = note.Content
+            Content = note.Content,
+            CreatedAt = note.CreatedAt
         };
     }
 
-    public async Task<NoteDto?> UpdateNoteAsync(Guid id, CreateNoteDto dto)
+    public async Task<NoteDto?> UpdateNoteAsync(Guid id, CreateNoteDto dto, CancellationToken cancellationToken)
     {
-        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Guid == id);
+        var note = await _appDbContext.Notes.FindAsync([id], cancellationToken);
         
         if (note is null)
             return null;
@@ -81,19 +84,20 @@ public class NoteService : INoteService
 
         note.Content = dto.Content;
         
-        await _appDbContext.SaveChangesAsync();
+        await _appDbContext.SaveChangesAsync(cancellationToken);
 
         return new NoteDto
         {
-            Guid = note.Guid,
+            Id = note.Id,
             Title = note.Title,
-            Content = note.Content
+            Content = note.Content,
+            CreatedAt = note.CreatedAt
         };
     }
     
-    public async Task<bool> DeleteNoteAsync(Guid id)
+    public async Task<bool> DeleteNoteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var note = await _appDbContext.Notes.FirstOrDefaultAsync(note => note.Guid == id);
+        var note = await _appDbContext.Notes.FindAsync([id], cancellationToken);
 
         if (note == null)
         {
@@ -101,7 +105,7 @@ public class NoteService : INoteService
         }
         
         _appDbContext.Notes.Remove(note);
-        await _appDbContext.SaveChangesAsync();
+        await _appDbContext.SaveChangesAsync(cancellationToken);
 
         return true;
     }
