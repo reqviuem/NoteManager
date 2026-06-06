@@ -21,17 +21,22 @@ export const noteReducer = createReducer(
   on(NoteActions.loadNotesSuccess, (state, { notes }) => ({ ...state, notes, loading: false })),
   on(NoteActions.loadNotesFailure, (state, { error }) => ({ ...state, error, loading: false })),
 
+  on(NoteActions.createNote, state => ({ ...state, error: null })),
   on(NoteActions.createNoteSuccess, (state, { note }) => ({
     ...state, notes: [...state.notes, note]
   })),
+  on(NoteActions.createNoteFailure, (state, { error }) => ({ ...state, error, loading: false })),
 
+  on(NoteActions.updateNote, state => ({ ...state, error: null })),
   on(NoteActions.updateNoteSuccess, (state, { note }) => ({
     ...state,
-    notes: state.notes.map(n => n.id === note.id ? note : n)
+    notes: state.notes.map((n: Note) => n.id === note.id ? note : n)
   })),
+  on(NoteActions.updateNoteFailure, (state, { error }) => ({ ...state, error, loading: false })),
 
   on(NoteActions.deleteNoteSuccess, (state, { id }) => ({
     ...state,
-    notes: state.notes.filter(n => n.id !== id)
-  }))
+    notes: state.notes.filter((n: Note) => n.id !== id)
+  })),
+  on(NoteActions.deleteNoteFailure, (state, { error }) => ({ ...state, error, loading: false }))
 );

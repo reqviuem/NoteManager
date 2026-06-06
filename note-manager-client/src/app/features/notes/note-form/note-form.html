@@ -12,6 +12,10 @@
       <textarea formControlName="content" rows="6"></textarea>
     </div>
 
+    <div class="error-msg" *ngIf="error$ | async as error">
+      {{ 'API_ERROR' | translate }}
+    </div>
+
     <div class="actions">
       <button type="button" (click)="onCancel()" class="btn-cancel">
         {{ 'CANCEL' | translate }}

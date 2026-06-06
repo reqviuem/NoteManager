@@ -4,9 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../../core/pipes/translate.pipe';
-import { createNote, updateNote } from '../../../store/note.actions';
-import { selectAllNotes } from '../../../store/note.selectors';
-import { take } from 'rxjs';
+import { createNote, updateNote, createNoteSuccess, updateNoteSuccess } from '../../../store/note.actions';
+import { selectAllNotes, selectError } from '../../../store/note.selectors';
+import { take, filter } from 'rxjs';
+import { Actions, ofType } from '@ngrx/effects';
+import { Note } from '../../../core/models/note.model';
 
 @Component({
   selector: 'app-note-form',
@@ -20,31 +22,41 @@ export class NoteFormComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
+  private actions$ = inject(Actions);
 
   form: FormGroup = this.fb.group({
-    title: ['', [Validators.required, Validators.minLength(1)]],
-    content: ['', [Validators.required, Validators.minLength(1)]]
+    title: ['', Validators.required],
+    content: ['', Validators.required]
   });
 
   isEditMode = false;
-  noteId: number | null = null;
+  noteId: string | null = null;
+  error$ = this.store.select(selectError);
 
   ngOnInit() {
-    this.noteId = this.route.snapshot.params['id'] ? +this.route.snapshot.params['id'] : null;
+    const paramId = this.route.snapshot.params['id'];
+    this.noteId = paramId ? paramId : null;
     this.isEditMode = !!this.noteId;
 
     if (this.isEditMode) {
       this.store.select(selectAllNotes).pipe(take(1)).subscribe(notes => {
-        const note = notes.find(n => n.id === this.noteId);
+        const note = notes.find((n: Note) => n.id === this.noteId);
         if (note) {
           this.form.patchValue({ title: note.title, content: note.content });
         }
       });
     }
+
+    // navigate away only on success
+    this.actions$.pipe(
+      ofType(createNoteSuccess, updateNoteSuccess),
+      take(1)
+    ).subscribe(() => this.router.navigate(['/notes']));
   }
 
   onSubmit() {
     if (this.form.invalid) return;
+
     const dto = this.form.value;
 
     if (this.isEditMode && this.noteId) {
@@ -52,8 +64,6 @@ export class NoteFormComponent implements OnInit {
     } else {
       this.store.dispatch(createNote({ dto }));
     }
-
-    this.router.navigate(['/notes']);
   }
 
   onCancel() {

@@ -15,7 +15,7 @@ export class NoteService {
     return this.http.get<Note[]>(this.apiUrl);
   }
 
-  getById(id: number): Observable<Note> {
+  getById(id: string): Observable<Note> {
     return this.http.get<Note>(`${this.apiUrl}/${id}`);
   }
 
@@ -23,11 +23,11 @@ export class NoteService {
     return this.http.post<Note>(this.apiUrl, dto);
   }
 
-  update(id: number, dto: CreateNoteDto): Observable<Note> {
+  update(id: string, dto: CreateNoteDto): Observable<Note> {
     return this.http.put<Note>(`${this.apiUrl}/${id}`, dto);
   }
 
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  delete(id: string): Observable<string> {
+    return this.http.delete<string>(`${this.apiUrl}/${id}`);
   }
 }

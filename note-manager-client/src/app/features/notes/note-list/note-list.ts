@@ -26,14 +26,15 @@ export class NoteListComponent implements OnInit {
   languages = [
     { code: 'en', label: 'English' },
     { code: 'es', label: 'Español' },
-    { code: 'ru', label: 'Русский' }
+    { code: 'bg', label: 'Български' },
+    { code: 'de', label: 'Deutsch' }
   ];
 
   ngOnInit() {
     this.store.dispatch(loadNotes());
   }
 
-  onDelete(id: number) {
+  onDelete(id: string) {
     this.store.dispatch(deleteNote({ id }));
   }
 
